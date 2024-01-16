@@ -35,12 +35,13 @@ const TokenIssuer = () => {
   const [selectedClass, setSelectedClass] = useState('');
   const [tokenStatus, setTokenStatus] = useState('No token issued');
   const [statusBoxBg, setStatusBoxBg] = useState(`${grey}80`); 
+  const [isTokenIssued, setIsTokenIssued] = useState(false);
   const toast = useToast();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      setTokenStatus('Token is currently issued');
+      setIsTokenIssued(true);
     }
   }, []);
 
@@ -72,9 +73,9 @@ const TokenIssuer = () => {
       const data = await response.json();
       if (response.ok) {
         console.log('Token:', data.token);
-        localStorage.setItem('token', data.token); // Store the token in localStorage
-        setTokenStatus(`Token issued for class: ${selectedClass}`); // Include selected class in the status
-        setStatusBoxBg(`${accent}80`); // Change background color to accent
+        localStorage.setItem('token', data.token); 
+        setIsTokenIssued(true);
+        setTokenStatus(`Token issued for class: ${selectedClass}`);       
   
         toast({
           title: 'Token Issued',
@@ -99,9 +100,9 @@ const TokenIssuer = () => {
   };  
 
   const deleteToken = () => {
-    console.log("Deleting token...");
     localStorage.removeItem('token');
-    setTokenStatus('No token issued'); // Update the token status on deletion
+    setIsTokenIssued(false);
+    setTokenStatus('No token issued'); 
     setStatusBoxBg(`${grey}80`); 
     console.log("Token deleted.");
     toast({
@@ -155,7 +156,7 @@ const TokenIssuer = () => {
                   <option value="bird">Bird</option>
                 </Select>
               </Box>
-              <HStack spacing={20} mr={79}>
+              <HStack spacing={20} mr={45}>
                 <VStack>
                   {/* Semi-transparent box for "Issue my token" button */}
                   <Box position="relative" w="full">
@@ -225,11 +226,47 @@ const TokenIssuer = () => {
                     </Button>
                   </Box>
                 </VStack>
+                <VStack>
                 <Box bg={statusBoxBg} p={4} borderRadius="lg" boxShadow="0px 4px 10px rgba(0, 0, 0, 0.3)">
                   <Text textAlign='center' color={secondaryText} fontSize="lg" fontFamily="'Kdam Thmor Pro', sans-serif">
                     {tokenStatus}
                   </Text>
                 </Box>
+                {/* Semi-transparent box for "Verify token" button */}
+                <Box position="relative" w="full">
+                      <Box 
+                        position="absolute"
+                        top="0"
+                        left="0"
+                        w="full"
+                        h="full"
+                        bg={`${buttonCol}80`}
+                        borderRadius="lg"
+                        zIndex="-1"
+                      />
+                    {isTokenIssued && (
+                      <Button 
+                        as="a" 
+                        href="/TokenVerifier" 
+                        mt={4}
+                        bgColor={`${COLORS.buttonCol}80`}
+                        color={COLORS.text}
+                        _hover={{ bg: `${COLORS.accent}80`, transform: 'scale(1.05)' }}
+                        _active={{ bg: `${COLORS.neonAccent}80` }}
+                        boxShadow="0px 4px 10px rgba(0, 0, 0, 0.2)"
+                        border="2px solid"
+                        borderColor={COLORS.grey}
+                        transition="all 0.3s ease-in-out"
+                        borderRadius="20px"
+                        fontFamily="'Kdam Thmor Pro', sans-serif"
+                        minW="200px"
+                        w={'10vw'} 
+                      >
+                        Verify token
+                      </Button>
+                    )}
+                  </Box>
+                </VStack>
               </HStack>
             </VStack>
           </Box>

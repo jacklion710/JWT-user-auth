@@ -1,5 +1,8 @@
 # NextJS-JWT-Auth-Demo
 
+## Deployment:
+https://jwt-user-auth.vercel.app
+
 ## Overview
 This repository contains a pilot project for a Next.js application demonstrating the use of JSON Web Tokens (JWT) for user authentication and classification. The goal is to showcase a secure, efficient, and user-friendly method for user classification based on quiz results, without the need to handle personally identifiable information (PII).
 

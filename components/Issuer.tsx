@@ -1,7 +1,8 @@
 "use client"
 import { 
   useState, 
-  useEffect 
+  useEffect,
+  FunctionComponent 
 } from 'react';
 import { 
   Text, 
@@ -30,7 +31,11 @@ const {
   redSecondary 
 } = COLORS;
 
-const Issuer = () => {
+interface IssuerProps {
+  onVerify: () => void;
+}
+
+const Issuer: FunctionComponent<IssuerProps> = ({ onVerify }) => {
   const [selectedClass, setSelectedClass] = useState('');
   const [tokenStatus, setTokenStatus] = useState('No token issued');
   const [statusBoxBg, setStatusBoxBg] = useState(`${grey}80`); 
@@ -245,8 +250,7 @@ const Issuer = () => {
                       />
                     {isTokenIssued && (
                       <Button 
-                        as="a" 
-                        href="/TokenVerifier" 
+                        onClick={onVerify}
                         mt={4}
                         bgColor={`${COLORS.buttonCol}80`}
                         color={COLORS.text}

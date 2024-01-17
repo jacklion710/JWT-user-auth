@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import { 
+  useState, 
+  FunctionComponent 
+} from 'react';
 import { 
   Text, 
   Button, 
@@ -13,7 +16,6 @@ import { COLORS } from '../utils/palette';
 import Head from 'next/head';
 
 const { 
-  primary,
   secondaryText,
   background, 
   secondary, 
@@ -21,7 +23,11 @@ const {
   accent
 } = COLORS;
 
-const Verifier = () => {
+interface VerifierProps {
+  onBack: () => void;
+}
+
+const Verifier: FunctionComponent<VerifierProps> = ({ onBack }) => {
   const [token, setToken] = useState('');
   const [verificationStatus, setVerificationStatus] = useState('');
 
@@ -76,6 +82,19 @@ const Verifier = () => {
               size="lg"
             >
               Verify Token
+            </Button>
+            <Button 
+              onClick={onBack}
+              bgColor={`${accent}80`}
+              color={secondaryText}
+              _hover={{ bg: `${accent}80`, transform: 'scale(1.05)' }}
+              boxShadow="0px 4px 10px rgba(0, 0, 0, 0.2)"
+              transition="all 0.3s ease-in-out"
+              borderRadius="20px"
+              fontFamily="'Kdam Thmor Pro', sans-serif"
+              size="lg"
+            >
+              Back to Issuer
             </Button>
             <Box bg={`${secondary}80`} p={4} borderRadius="lg" boxShadow="0px 4px 10px rgba(0, 0, 0, 0.3)">
               <Text textAlign='center' color={secondaryText} fontSize="lg" fontFamily="'Kdam Thmor Pro', sans-serif">

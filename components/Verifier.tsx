@@ -1,4 +1,3 @@
-"use client"
 import { useState } from 'react';
 import { 
   Text, 
@@ -10,7 +9,6 @@ import {
   VStack, 
   Heading 
 } from '@chakra-ui/react';
-import { useToast } from '@chakra-ui/react';
 import { COLORS } from '../utils/palette';
 import Head from 'next/head';
 
@@ -23,10 +21,9 @@ const {
   accent
 } = COLORS;
 
-const TokenVerifier = () => {
+const Verifier = () => {
   const [token, setToken] = useState('');
   const [verificationStatus, setVerificationStatus] = useState('');
-  const toast = useToast();
 
   // Function to simulate token verification
   async function verifyJWT(token: string) {
@@ -39,21 +36,13 @@ const TokenVerifier = () => {
   }
 
   const verifyToken = async () => {
-    // Here, add logic to verify the JWT
-    // This usually involves sending the JWT to your server or using a library to verify it
-    // For demonstration, let's assume a function verifyJWT(token) that returns a promise
     try {
-      const result = await verifyJWT(token); // Replace with actual verification logic
+      const result = await verifyJWT(token);
       setVerificationStatus(`Token is valid: ${result}`);
     } catch (error) {
       console.error('Error verifying token:', error);
-      toast({
-        title: 'Error',
-        description: 'Invalid token.',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-      });
+      // Replace toast calls with console.log or another method of displaying messages
+      console.log('Error: Invalid token.');
       setVerificationStatus('Invalid token.');
     }
   };
@@ -100,4 +89,4 @@ const TokenVerifier = () => {
   );
 };
 
-export default TokenVerifier;
+export default Verifier;

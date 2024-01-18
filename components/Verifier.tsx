@@ -35,18 +35,17 @@ const Verifier: FunctionComponent<VerifierProps> = ({ onBack }) => {
     });
   }
   
-
   const verifyToken = async () => {
     try {
       const result = await verifyJWT(token);
-      setVerificationStatus(`Token is valid: ${result}`);
-      setStatusBoxBg(`${buttonCol}80`); // Set the background color on success
+      setVerificationStatus(`Token is valid. ${result}`);
+      setStatusBoxBg(`${COLORS.accent}80`); // Set to accent color on success
     } catch (error) {
       console.error('Error verifying token:', error);
       setVerificationStatus('Invalid token.');
-      setStatusBoxBg(`${redPrimary}80`); // Set the background color on failure
+      setStatusBoxBg(`${redPrimary}80`); // Keep red for failure
     }
-  };
+  };  
 
   return (
     <ChakraProvider>

@@ -40,60 +40,95 @@ const BlackLister: FunctionComponent<BlackListerProps> = ({ goToIssuer, goToVeri
                   borderRadius="20px"
                   fontFamily="'Kdam Thmor Pro', sans-serif"
                 />
-                <Button 
-                  onClick={blacklistToken}
-                  mt={4}
-                  bgColor={`${buttonCol}80`}
-                  color={COLORS.text}
-                  _hover={{ bg: `${COLORS.accent}80`, transform: 'scale(1.05)' }}
-                  _active={{ bg: `${COLORS.neonAccent}80` }}
-                  boxShadow="0px 4px 10px rgba(0, 0, 0, 0.2)"
-                  border="2px solid"
-                  borderColor={COLORS.grey}
-                  transition="all 0.3s ease-in-out"
-                  borderRadius="20px"
-                  minW="200px"
-                  w="10vw"
-                  fontFamily="'Kdam Thmor Pro', sans-serif"
-                >
-                  Blacklist Token
-                </Button>
-                <Button 
-                  onClick={goToIssuer}
-                  mt={4}
-                  bgColor={`${COLORS.buttonCol}80`}
-                  color={COLORS.text}
-                  _hover={{ bg: `${COLORS.accent}80`, transform: 'scale(1.05)' }}
-                  _active={{ bg: `${COLORS.neonAccent}80` }}
-                  boxShadow="0px 4px 10px rgba(0, 0, 0, 0.2)"
-                  border="2px solid"
-                  borderColor={COLORS.grey}
-                  transition="all 0.3s ease-in-out"
-                  borderRadius="20px"
-                  fontFamily="'Kdam Thmor Pro', sans-serif"
-                  minW="200px"
-                  w={'10vw'} 
-                >
-                  Go To Issuer
-                </Button>
-                <Button 
-                  onClick={goToVerifier}
-                  mt={4}
-                  bgColor={`${COLORS.buttonCol}80`}
-                  color={COLORS.text}
-                  _hover={{ bg: `${COLORS.accent}80`, transform: 'scale(1.05)' }}
-                  _active={{ bg: `${COLORS.neonAccent}80` }}
-                  boxShadow="0px 4px 10px rgba(0, 0, 0, 0.2)"
-                  border="2px solid"
-                  borderColor={COLORS.grey}
-                  transition="all 0.3s ease-in-out"
-                  borderRadius="20px"
-                  fontFamily="'Kdam Thmor Pro', sans-serif"
-                  minW="200px"
-                  w={'10vw'} 
-                >
-                  Go To Verifier
-                </Button>
+                <Box position="relative" w="full" display="flex" justifyContent="center">
+                  <Box 
+                    position="absolute"
+                    top="0"
+                    left="0"
+                    w="full"
+                    h="full"
+                    bg={`${buttonCol}80`}
+                    borderRadius="lg"
+                    zIndex="-1"
+                  />
+                    <Button 
+                    onClick={blacklistToken}
+                    mt={4}
+                    bgColor={`${buttonCol}80`}
+                    color={COLORS.text}
+                    _hover={{ bg: `${COLORS.accent}80`, transform: 'scale(1.05)' }}
+                    _active={{ bg: `${COLORS.neonAccent}80` }}
+                    boxShadow="0px 4px 10px rgba(0, 0, 0, 0.2)"
+                    border="2px solid"
+                    borderColor={COLORS.grey}
+                    transition="all 0.3s ease-in-out"
+                    borderRadius="20px"
+                    minW="200px"
+                    w="10vw"
+                    >
+                    Blacklist Token
+                    </Button>
+                </Box>
+                <Box position="relative" w="full" display="flex" justifyContent="center">
+                  <Box 
+                    position="absolute"
+                    top="0"
+                    left="0"
+                    w="full"
+                    h="full"
+                    bg={`${buttonCol}80`}
+                    borderRadius="lg"
+                    zIndex="-1"
+                  />
+                    <Button 
+                    onClick={goToIssuer}
+                    mt={4}
+                    bgColor={`${COLORS.buttonCol}80`}
+                    color={COLORS.text}
+                    _hover={{ bg: `${COLORS.accent}80`, transform: 'scale(1.05)' }}
+                    _active={{ bg: `${COLORS.neonAccent}80` }}
+                    boxShadow="0px 4px 10px rgba(0, 0, 0, 0.2)"
+                    border="2px solid"
+                    borderColor={COLORS.grey}
+                    transition="all 0.3s ease-in-out"
+                    borderRadius="20px"
+                    fontFamily="'Kdam Thmor Pro', sans-serif"
+                    minW="200px"
+                    w={'10vw'} 
+                    >
+                    Go To Issuer
+                    </Button>
+                </Box>
+                <Box position="relative" w="full" display="flex" justifyContent="center">
+                  <Box 
+                    position="absolute"
+                    top="0"
+                    left="0"
+                    w="full"
+                    h="full"
+                    bg={`${buttonCol}80`}
+                    borderRadius="lg"
+                    zIndex="-1"
+                  />
+                    <Button 
+                    onClick={goToVerifier}
+                    mt={4}
+                    bgColor={`${COLORS.buttonCol}80`}
+                    color={COLORS.text}
+                    _hover={{ bg: `${COLORS.accent}80`, transform: 'scale(1.05)' }}
+                    _active={{ bg: `${COLORS.neonAccent}80` }}
+                    boxShadow="0px 4px 10px rgba(0, 0, 0, 0.2)"
+                    border="2px solid"
+                    borderColor={COLORS.grey}
+                    transition="all 0.3s ease-in-out"
+                    borderRadius="20px"
+                    fontFamily="'Kdam Thmor Pro', sans-serif"
+                    minW="200px"
+                    w={'10vw'} 
+                    >
+                    Go To Verifier
+                    </Button>
+                </Box>
               </VStack>
             </Box>
           </VStack>

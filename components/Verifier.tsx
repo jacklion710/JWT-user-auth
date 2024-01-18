@@ -2,6 +2,7 @@ import { useState, FunctionComponent } from 'react';
 import { Text, Button, Input, Box, ChakraProvider, Container, VStack, Heading } from '@chakra-ui/react';
 import { COLORS } from '../utils/palette';
 import Head from 'next/head';
+import { jwtDecode } from "jwt-decode";
 
 const { 
   secondaryText, background, secondary, grey, buttonCol, redPrimary 
@@ -18,13 +19,22 @@ const Verifier: FunctionComponent<VerifierProps> = ({ onBack }) => {
 
   // Function to simulate token verification
   async function verifyJWT(token: string) {
-    // Replace with actual JWT verification logic
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        token ? resolve("Valid") : reject(new Error("Invalid token"));
+        if (token) {
+          try {
+            const decoded = jwtDecode<{ class: string }>(token);
+            resolve(`Class: ${decoded.class}`);
+          } catch (error) {
+            reject(new Error("Invalid token"));
+          }
+        } else {
+          reject(new Error("No token provided"));
+        }
       }, 1000); // Simulate an async operation
     });
   }
+  
 
   const verifyToken = async () => {
     try {

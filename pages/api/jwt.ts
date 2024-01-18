@@ -16,7 +16,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     // Convert exp to a suitable format for jwt.sign (e.g., seconds, '2h', '7d')
     const expiresIn = `${exp}s`; // Assuming exp is in seconds
 
-    const token = jwt.sign({ class: userClass }, 'your-secret-key', { expiresIn });
+    const token = jwt.sign({ class: userClass }, 'your-secret-key', { expiresIn }); // TODO: SET THE SECRET KEY IN A .env FILE
 
     res.status(200).json({ token });
   } else {

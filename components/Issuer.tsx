@@ -39,9 +39,10 @@ const {
 
 interface IssuerProps {
   onVerify: () => void;
+  onBlackList: () => void; 
 }
 
-const Issuer: FunctionComponent<IssuerProps> = ({ onVerify }) => {
+const Issuer: FunctionComponent<IssuerProps> = ({ onVerify, onBlackList }) => {
   const [selectedClass, setSelectedClass] = useState('');
   const [tokenStatus, setTokenStatus] = useState('No token issued');
   const [statusBoxBg, setStatusBoxBg] = useState(`${grey}80`); 
@@ -253,6 +254,7 @@ const Issuer: FunctionComponent<IssuerProps> = ({ onVerify }) => {
                     borderColor={grey}
                     transition="all 0.3s ease-in-out"
                     borderRadius="full"
+                    mt={3}
                   >
                     <SliderTrack
                       bg={`${buttonCol}80`}
@@ -282,44 +284,75 @@ const Issuer: FunctionComponent<IssuerProps> = ({ onVerify }) => {
                 </Box>
                 </VStack>
                 <VStack>
-                <Box bg={statusBoxBg} p={4} borderRadius="lg" boxShadow="0px 4px 10px rgba(0, 0, 0, 0.3)">
+                <Box position="relative" w="full">
+                  <Box 
+                    position="absolute"
+                    top="0"
+                    left="0"
+                    w="full"
+                    h="full"
+                    bg={`${buttonCol}80`}
+                    borderRadius="lg"
+                    zIndex="-1"
+                  />
+                  <Button 
+                    onClick={onBlackList}
+                    mt={4}
+                    bgColor={`${COLORS.buttonCol}80`}
+                    color={COLORS.text}
+                    _hover={{ bg: `${COLORS.accent}80`, transform: 'scale(1.05)' }}
+                    _active={{ bg: `${COLORS.neonAccent}80` }}
+                    boxShadow="0px 4px 10px rgba(0, 0, 0, 0.2)"
+                    border="2px solid"
+                    borderColor={COLORS.grey}
+                    transition="all 0.3s ease-in-out"
+                    borderRadius="20px"
+                    fontFamily="'Kdam Thmor Pro', sans-serif"
+                    minW="200px"
+                    w={'10vw'} 
+                  >
+                    Go to Blacklister
+                  </Button>
+                </Box>
+                {/* Semi-transparent box for "Verify token" button */}
+                <Box position="relative" w="full">
+                  <Box 
+                    position="absolute"
+                    top="0"
+                    left="0"
+                    w="full"
+                    h="full"
+                    bg={`${buttonCol}80`}
+                    borderRadius="lg"
+                    zIndex="-1"
+                  />
+                {isTokenIssued && (
+                  <Button 
+                    onClick={onVerify}
+                    mt={4}
+                    bgColor={`${COLORS.buttonCol}80`}
+                    color={COLORS.text}
+                    _hover={{ bg: `${COLORS.accent}80`, transform: 'scale(1.05)' }}
+                    _active={{ bg: `${COLORS.neonAccent}80` }}
+                    boxShadow="0px 4px 10px rgba(0, 0, 0, 0.2)"
+                    border="2px solid"
+                    borderColor={COLORS.grey}
+                    transition="all 0.3s ease-in-out"
+                    borderRadius="20px"
+                    fontFamily="'Kdam Thmor Pro', sans-serif"
+                    minW="200px"
+                    w={'10vw'} 
+                    mb={12}
+                  >
+                    Verify token
+                  </Button>
+                )}
+              </Box>
+                <Box bg={statusBoxBg} p={4} borderRadius="lg" boxShadow="0px 4px 10px rgba(0, 0, 0, 0.3)" mb={5}>
                   <Text textAlign='center' color={secondaryText} fontSize="lg" fontFamily="'Kdam Thmor Pro', sans-serif">
                     {tokenStatus}
                   </Text>
                 </Box>
-                {/* Semi-transparent box for "Verify token" button */}
-                <Box position="relative" w="full">
-                      <Box 
-                        position="absolute"
-                        top="0"
-                        left="0"
-                        w="full"
-                        h="full"
-                        bg={`${buttonCol}80`}
-                        borderRadius="lg"
-                        zIndex="-1"
-                      />
-                    {isTokenIssued && (
-                      <Button 
-                        onClick={onVerify}
-                        mt={4}
-                        bgColor={`${COLORS.buttonCol}80`}
-                        color={COLORS.text}
-                        _hover={{ bg: `${COLORS.accent}80`, transform: 'scale(1.05)' }}
-                        _active={{ bg: `${COLORS.neonAccent}80` }}
-                        boxShadow="0px 4px 10px rgba(0, 0, 0, 0.2)"
-                        border="2px solid"
-                        borderColor={COLORS.grey}
-                        transition="all 0.3s ease-in-out"
-                        borderRadius="20px"
-                        fontFamily="'Kdam Thmor Pro', sans-serif"
-                        minW="200px"
-                        w={'10vw'} 
-                      >
-                        Verify token
-                      </Button>
-                    )}
-                  </Box>
                 </VStack>
               </HStack>
             </VStack>

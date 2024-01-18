@@ -1,26 +1,10 @@
-import { 
-  useState, 
-  FunctionComponent 
-} from 'react';
-import { 
-  Text, 
-  Button, 
-  Input,
-  Box, 
-  ChakraProvider, 
-  Container, 
-  VStack, 
-  Heading 
-} from '@chakra-ui/react';
+import { useState, FunctionComponent } from 'react';
+import { Text, Button, Input, Box, ChakraProvider, Container, VStack, Heading } from '@chakra-ui/react';
 import { COLORS } from '../utils/palette';
 import Head from 'next/head';
 
 const { 
-  secondaryText,
-  background, 
-  secondary, 
-  grey,
-  accent
+  secondaryText, background, secondary, grey, buttonCol, redPrimary 
 } = COLORS;
 
 interface VerifierProps {
@@ -29,7 +13,8 @@ interface VerifierProps {
 
 const Verifier: FunctionComponent<VerifierProps> = ({ onBack }) => {
   const [token, setToken] = useState('');
-  const [verificationStatus, setVerificationStatus] = useState('');
+  const [verificationStatus, setVerificationStatus] = useState('Awaiting token verification...');
+  const [statusBoxBg, setStatusBoxBg] = useState(`${grey}80`);
 
   // Function to simulate token verification
   async function verifyJWT(token: string) {
@@ -45,11 +30,11 @@ const Verifier: FunctionComponent<VerifierProps> = ({ onBack }) => {
     try {
       const result = await verifyJWT(token);
       setVerificationStatus(`Token is valid: ${result}`);
+      setStatusBoxBg(`${buttonCol}80`); // Set the background color on success
     } catch (error) {
       console.error('Error verifying token:', error);
-      // Replace toast calls with console.log or another method of displaying messages
-      console.log('Error: Invalid token.');
       setVerificationStatus('Invalid token.');
+      setStatusBoxBg(`${redPrimary}80`); // Set the background color on failure
     }
   };
 
@@ -62,44 +47,88 @@ const Verifier: FunctionComponent<VerifierProps> = ({ onBack }) => {
         <Container py={10}>
           <VStack spacing={4} align="center">
             <Heading fontFamily="'Kdam Thmor Pro', sans-serif">JSON Web Token Verifier</Heading>
-            <Input 
-              placeholder="Enter JWT here" 
-              size="lg"
-              w="full"
-              fontFamily="'Kdam Thmor Pro', sans-serif"
-              borderColor={grey}
-              onChange={(e) => setToken(e.target.value)}
-            />
-            <Button 
-              onClick={verifyToken}
-              bgColor={`${accent}80`}
-              color={secondaryText}
-              _hover={{ bg: `${accent}80`, transform: 'scale(1.05)' }}
-              boxShadow="0px 4px 10px rgba(0, 0, 0, 0.2)"
-              transition="all 0.3s ease-in-out"
-              borderRadius="20px"
-              fontFamily="'Kdam Thmor Pro', sans-serif"
-              size="lg"
-            >
-              Verify Token
-            </Button>
-            <Button 
-              onClick={onBack}
-              bgColor={`${accent}80`}
-              color={secondaryText}
-              _hover={{ bg: `${accent}80`, transform: 'scale(1.05)' }}
-              boxShadow="0px 4px 10px rgba(0, 0, 0, 0.2)"
-              transition="all 0.3s ease-in-out"
-              borderRadius="20px"
-              fontFamily="'Kdam Thmor Pro', sans-serif"
-              size="lg"
-            >
-              Back to Issuer
-            </Button>
-            <Box bg={`${secondary}80`} p={4} borderRadius="lg" boxShadow="0px 4px 10px rgba(0, 0, 0, 0.3)">
-              <Text textAlign='center' color={secondaryText} fontSize="lg" fontFamily="'Kdam Thmor Pro', sans-serif">
-                {verificationStatus}
-              </Text>
+            <Box bg={`${secondary}20`} p={4} borderRadius="lg" boxShadow="0px 4px 10px rgba(0, 0, 0, 0.5)">
+              <VStack spacing={4} align="center">
+                <Input 
+                  placeholder="Enter JWT here" 
+                  size="lg"
+                  w="full"
+                  onChange={(e) => setToken(e.target.value)}
+                  borderColor={COLORS.primary}
+                  bg={`${COLORS.background}A0`} 
+                  color={COLORS.text}
+                  _hover={{ borderColor: COLORS.accent }}
+                  _focus={{ borderColor: COLORS.accent2, boxShadow: `0px 0px 10px ${COLORS.accent2}` }}
+                  transition="all 0.3s ease-in-out"
+                  borderRadius="20px"
+                  fontFamily="'Kdam Thmor Pro', sans-serif"
+                />
+                <Box position="relative" w="full" display="flex" justifyContent="center" mb={5}>
+                  <Box 
+                    position="absolute"
+                    top="0"
+                    left="0"
+                    w="full"
+                    h="full"
+                    bg={`${buttonCol}80`}
+                    borderRadius="lg"
+                    zIndex="-1"
+                  />
+                  <Button 
+                    onClick={verifyToken}
+                    mt={4}
+                    bgColor={`${COLORS.buttonCol}80`}
+                    color={COLORS.text}
+                    _hover={{ bg: `${COLORS.accent}80`, transform: 'scale(1.05)' }}
+                    _active={{ bg: `${COLORS.neonAccent}80` }}
+                    boxShadow="0px 4px 10px rgba(0, 0, 0, 0.2)"
+                    border="2px solid"
+                    borderColor={COLORS.grey}
+                    transition="all 0.3s ease-in-out"
+                    borderRadius="20px"
+                    minW="200px"
+                    w="10vw"
+                    fontFamily="'Kdam Thmor Pro', sans-serif"
+                  >
+                    Verify Token
+                  </Button>
+                </Box>
+                <Box bg={statusBoxBg} p={4} borderRadius="lg" boxShadow="0px 4px 10px rgba(0, 0, 0, 0.3)">
+                  <Text textAlign='center' color={secondaryText} fontSize="lg" fontFamily="'Kdam Thmor Pro', sans-serif">
+                    {verificationStatus}
+                  </Text>
+                </Box>
+                <Box position="relative" w="full" display="flex" justifyContent="center" mb={5}>
+                  <Box 
+                    position="absolute"
+                    top="0"
+                    left="0"
+                    w="full"
+                    h="full"
+                    bg={`${buttonCol}80`}
+                    borderRadius="lg"
+                    zIndex="-1"
+                  />
+                  <Button 
+                    onClick={onBack}
+                    mt={4}
+                    bgColor={`${COLORS.buttonCol}80`}
+                    color={COLORS.text}
+                    _hover={{ bg: `${COLORS.accent}80`, transform: 'scale(1.05)' }}
+                    _active={{ bg: `${COLORS.neonAccent}80` }}
+                    boxShadow="0px 4px 10px rgba(0, 0, 0, 0.2)"
+                    border="2px solid"
+                    borderColor={COLORS.grey}
+                    transition="all 0.3s ease-in-out"
+                    borderRadius="20px"
+                    fontFamily="'Kdam Thmor Pro', sans-serif"
+                    minW="200px"
+                    w={'10vw'} 
+                  >
+                    Back to Issuer
+                  </Button>
+                </Box>
+              </VStack>
             </Box>
           </VStack>
         </Container>

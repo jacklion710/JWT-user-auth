@@ -144,7 +144,7 @@ const Issuer: FunctionComponent<IssuerProps> = ({ onVerify }) => {
                   placeholder="Select a class" 
                   onChange={handleClassChange}
                   borderColor={COLORS.primary}
-                  bg={`${COLORS.background}A0`} // Semi-transparent background
+                  bg={`${COLORS.background}A0`} 
                   color={COLORS.text}
                   _hover={{ borderColor: COLORS.accent }}
                   _focus={{ borderColor: COLORS.accent2, boxShadow: `0px 0px 10px ${COLORS.accent2}` }}

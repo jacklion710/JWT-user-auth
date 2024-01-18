@@ -13,7 +13,12 @@ import {
   Container, 
   VStack, 
   HStack, 
-  Heading 
+  Heading,
+  Slider,
+  SliderTrack,
+  SliderFilledTrack,
+  SliderThumb,
+  SliderMark,
 } from '@chakra-ui/react';
 import { ChangeEvent } from 'react';
 import { useToast } from '@chakra-ui/react';
@@ -27,6 +32,7 @@ const {
   secondary, 
   grey, 
   buttonCol, 
+  accent,
   redPrimary, 
   redSecondary 
 } = COLORS;
@@ -40,6 +46,8 @@ const Issuer: FunctionComponent<IssuerProps> = ({ onVerify }) => {
   const [tokenStatus, setTokenStatus] = useState('No token issued');
   const [statusBoxBg, setStatusBoxBg] = useState(`${grey}80`); 
   const [isTokenIssued, setIsTokenIssued] = useState(false);
+  const [tokenExpiration, setTokenExpiration] = useState(60);
+  const [isInteracting, setIsInteracting] = useState(false);
   const toast = useToast();
 
   useEffect(() => {
@@ -71,7 +79,7 @@ const Issuer: FunctionComponent<IssuerProps> = ({ onVerify }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ class: selectedClass }),
+        body: JSON.stringify({ class: selectedClass, exp: tokenExpiration }),
       });
   
       const data = await response.json();
@@ -229,6 +237,48 @@ const Issuer: FunctionComponent<IssuerProps> = ({ onVerify }) => {
                       Delete my token
                     </Button>
                   </Box>
+                  <Box my={4}>
+                  <Text mb={2}>Token Expiration: {tokenExpiration} seconds</Text>
+                  <Slider
+                    defaultValue={60}
+                    min={60}
+                    max={25920000} // 300 days in seconds
+                    step={60}
+                    onChange={(val) => setTokenExpiration(val)}
+                    _hover={{ transform: 'scale(1.05)' }}
+                    _active={{ bg: `${accent}60` }}
+                    boxShadow="0px 4px 10px rgba(0, 0, 0, 0.2)"
+                    border="2px solid"
+                    borderColor={grey}
+                    transition="all 0.3s ease-in-out"
+                    borderRadius="full"
+                  >
+                    <SliderTrack
+                      bg={`${buttonCol}80`}
+                      borderRadius="full"
+                      position="relative"
+                      h="8px"
+                    >
+                      <SliderFilledTrack bg={isInteracting ? `${accent}80` : `${primary}60`}/>
+                    </SliderTrack>
+                    <SliderThumb 
+                      color={primary}
+                      bgColor={`${primary}90`}
+                      boxSize={6}
+                      border="1.5px solid"
+                      borderColor={grey}
+                      boxShadow="0px 2px 5px rgba(0, 0, 0, 0.2)"
+                      _hover={{
+                        boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.3)'
+                      }}
+                      _active={{
+                        bg: `${accent}CC`
+                      }}
+                      h='2.5vh'
+                      w='1vh'
+                    />
+                  </Slider>
+                </Box>
                 </VStack>
                 <VStack>
                 <Box bg={statusBoxBg} p={4} borderRadius="lg" boxShadow="0px 4px 10px rgba(0, 0, 0, 0.3)">

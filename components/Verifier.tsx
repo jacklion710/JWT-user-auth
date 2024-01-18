@@ -46,15 +46,36 @@ const Verifier: FunctionComponent<VerifierProps> = ({ onBack, onBlackList }) => 
   
   const verifyToken = async () => {
     try {
-      const result = await verifyJWT(token);
-      setVerificationStatus(`Token is valid. ${result}`);
-      setStatusBoxBg(`${COLORS.accent}80`); // Set to accent color on success
+      const response = await fetch('/api/jwt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token, action: 'verify' }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setVerificationStatus(`Token is valid. Class: ${data.class}`);
+        setStatusBoxBg(`${COLORS.accent}80`);
+      } else {
+        throw new Error(data.error || "Error verifying token");
+      }
     } catch (error) {
       console.error('Error verifying token:', error);
-      setVerificationStatus('Invalid token.');
-      setStatusBoxBg(`${redPrimary}80`); // Keep red for failure
+  
+      // Check if error is an instance of Error and extract the message
+      if (error instanceof Error) {
+        setVerificationStatus(error.message);
+      } else {
+        // If it's not an Error instance, use a generic error message
+        setVerificationStatus('An unexpected error occurred.');
+      }
+  
+      setStatusBoxBg(`${redPrimary}80`);
     }
-  };  
+  };
 
   return (
     <ChakraProvider>

@@ -2,14 +2,15 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import jwt from 'jsonwebtoken';
 
-let blacklist = []; // Temporary in-memory blacklist
+// Define the type of blacklist as an array of strings
+let blacklist: string[] = []; 
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    // Handle token issuing
-    const { class: userClass, exp, action } = req.body;
+    const { class: userClass, exp, action, token } = req.body;
 
     if (action === 'issue') {
+      // Handle token issuing
       if (!userClass) {
         return res.status(400).json({ error: 'Class is required' });
       }
@@ -18,21 +19,36 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       }
 
       const expiresIn = `${exp}s`; // Assuming exp is in seconds
-      const token = jwt.sign({ class: userClass }, 'your-secret-key', { expiresIn });
-      res.status(200).json({ token });
-    } else if (action === 'blacklist') {
-      const { token } = req.body;
+      const newToken = jwt.sign({ class: userClass }, 'your-secret-key', { expiresIn });
+      return res.status(200).json({ token: newToken });
+    } 
+    else if (action === 'verify') {
+      // Handle token verification
+      if (blacklist.includes(token)) {
+        return res.status(401).json({ error: 'Token is blacklisted' });
+      }
+
+      try {
+        jwt.verify(token, 'your-secret-key');
+        return res.status(200).json({ message: 'Token is valid' });
+      } catch (error) {
+        return res.status(401).json({ error: 'Invalid token' });
+      }
+    }
+    else if (action === 'blacklist') {
+      // Handle token blacklisting
       if (!token) {
         return res.status(400).json({ error: 'Token is required' });
       }
 
-      blacklist.push(token); // Add token to blacklist
-      res.status(200).json({ message: 'Token blacklisted successfully' });
-    } else {
-      res.status(400).json({ error: 'Invalid action' });
+      blacklist.push(token);
+      return res.status(200).json({ message: 'Token blacklisted successfully' });
+    } 
+    else {
+      return res.status(400).json({ error: 'Invalid action' });
     }
   } else {
     res.setHeader('Allow', ['POST']);
-    res.status(405).json({ error: `Method ${req.method} Not Allowed` });
+    return res.status(405).json({ error: `Method ${req.method} Not Allowed` });
   }
 }

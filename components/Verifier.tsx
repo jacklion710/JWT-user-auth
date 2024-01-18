@@ -116,7 +116,7 @@ const Verifier: FunctionComponent<VerifierProps> = ({ onBack, onBlackList }) => 
                     {verificationStatus}
                   </Text>
                 </Box>
-                <Box position="relative" w="full">
+                <Box position="relative" w="full" display="flex" justifyContent="center">
                   <Box 
                     position="absolute"
                     top="0"

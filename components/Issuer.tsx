@@ -87,7 +87,8 @@ const Issuer: FunctionComponent<IssuerProps> = ({ onVerify }) => {
         console.log('Token:', data.token);
         localStorage.setItem('token', data.token); 
         setIsTokenIssued(true);
-        setTokenStatus(`Token issued for class: ${selectedClass}`);       
+        setTokenStatus(`Token issued for class: ${selectedClass}`);    
+        setStatusBoxBg(`${accent}80`);   
   
         toast({
           title: 'Token Issued',

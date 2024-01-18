@@ -2,7 +2,7 @@ import { useState, FunctionComponent } from 'react';
 import { Text, Button, Input, Box, ChakraProvider, Container, VStack, Heading } from '@chakra-ui/react';
 import { COLORS } from '../utils/palette';
 import Head from 'next/head';
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode, JwtPayload } from "jwt-decode";
 
 const { 
   secondaryText, background, secondary, grey, buttonCol, redPrimary 
@@ -10,6 +10,10 @@ const {
 
 interface VerifierProps {
   onBack: () => void;
+}
+
+interface MyTokenPayload extends JwtPayload {
+  class?: string;
 }
 
 const Verifier: FunctionComponent<VerifierProps> = ({ onBack }) => {
@@ -20,18 +24,22 @@ const Verifier: FunctionComponent<VerifierProps> = ({ onBack }) => {
   // Function to simulate token verification
   async function verifyJWT(token: string) {
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (token) {
-          try {
-            const decoded = jwtDecode<{ class: string }>(token);
-            resolve(`Class: ${decoded.class}`);
-          } catch (error) {
-            reject(new Error("Invalid token"));
-          }
-        } else {
-          reject(new Error("No token provided"));
+      if (token) {
+        try {
+          const decoded = jwtDecode<MyTokenPayload>(token);
+          const currentUnixTime = Math.floor(Date.now() / 1000);
+  
+          if (decoded.exp && decoded.exp < currentUnixTime) {
+            reject(new Error("Token has expired"));
+          } else {
+            resolve(`Valid. Class: ${decoded.class}`);
+          }          
+        } catch (error) {
+          reject(new Error("Invalid token"));
         }
-      }, 1000); // Simulate an async operation
+      } else {
+        reject(new Error("No token provided"));
+      }
     });
   }
   

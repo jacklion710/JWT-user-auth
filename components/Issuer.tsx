@@ -80,7 +80,11 @@ const Issuer: FunctionComponent<IssuerProps> = ({ onVerify, onBlackList }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ class: selectedClass, exp: tokenExpiration }),
+        body: JSON.stringify({
+          class: selectedClass, 
+          exp: tokenExpiration,
+          action: 'issue'  // Add this line
+        }),
       });
   
       const data = await response.json();

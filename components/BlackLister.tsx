@@ -4,7 +4,12 @@ import { useState, FunctionComponent } from 'react';
 import { Text, Button, Input, Box, ChakraProvider, Container, VStack, Heading } from '@chakra-ui/react';
 import { COLORS } from '../utils/palette';
 
-const { secondaryText, background, secondary, buttonCol } = COLORS;
+const { 
+    grey, 
+    background, 
+    secondary, 
+    buttonCol 
+} = COLORS;
 
 interface BlackListerProps {
     goToIssuer: () => void;
@@ -13,10 +18,40 @@ interface BlackListerProps {
 
 const BlackLister: FunctionComponent<BlackListerProps> = ({ goToIssuer, goToVerifier }) => {
   const [token, setToken] = useState('');
+  const [blacklistStatus, setBlacklistStatus] = useState({
+    message: 'Enter a token to blacklist',
+    bgColor: grey
+  });
 
   const blacklistToken = async () => {
-    // Logic to blacklist the token
-  };
+    try {
+      const response = await fetch('/api/jwt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token, action: 'blacklist' }),
+      });
+  
+      if (response.ok) {
+        setBlacklistStatus({ 
+          message: "Token successfully blacklisted", 
+          bgColor: COLORS.accent 
+        });
+      } else {
+        const errorData = await response.json();
+        setBlacklistStatus({ 
+          message: errorData.error || "Failed to blacklist token", 
+          bgColor: COLORS.redPrimary 
+        });
+      }
+    } catch (error) {
+      setBlacklistStatus({ 
+        message: "Failed to blacklist token", 
+        bgColor: COLORS.redPrimary 
+      });
+    }
+  };  
 
   return (
     <ChakraProvider>
@@ -68,6 +103,17 @@ const BlackLister: FunctionComponent<BlackListerProps> = ({ goToIssuer, goToVeri
                     >
                     Blacklist Token
                     </Button>
+                </Box>
+                <Box
+                    bg={blacklistStatus.bgColor}
+                    p={3}
+                    borderRadius="lg"
+                    boxShadow="0px 4px 10px rgba(0, 0, 0, 0.2)"
+                    my={4}
+                    >
+                    <Text color={COLORS.secondaryText} fontFamily="'Kdam Thmor Pro', sans-serif">
+                        {blacklistStatus.message}
+                    </Text>
                 </Box>
                 <Box position="relative" w="full" display="flex" justifyContent="center">
                   <Box 

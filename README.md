@@ -31,4 +31,63 @@ To address these challenges, JSON Web Tokens (JWT) are proposed as a viable alte
 - **Chakra-UI:** For front end and user interactivity.
 
 ## How to Use
-*Instructions on cloning the repository, installing dependencies, and running the project.*
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/your-github/NextJS-JWT-Auth-Demo.git
+    ```
+
+2. Navigate to the project directory:
+
+   ```bash
+   cd jwt-user-auth
+    ```
+
+3. Install dependencies:
+
+   ```bash
+   npm install
+    ```
+
+4. Set up the environment variables:
+Create a .env.local file in the root directory.
+Add the following line (replace your_secret_key with your actual JWT secret key):
+
+    ```bash
+    JWT_SECRET_KEY=your_secret_key
+    ```
+
+5. Start the development server:
+
+    ```bash
+    npm run dev
+    ```
+
+This will start the server on http://localhost:3000
+
+6. Open your web browser and navigate to http://localhost:3000 to view the application.
+
+## Additional Notes
+The JWT secret key should be kept private and not exposed in your codebase or version control.
+For production, ensure to configure the JWT secret key securely in your production environment.
+
+# Components Overview
+
+## Issuer
+The Issuer component is responsible for generating JWTs. Users can select a classification (e.g., Dog, Cat, Fish, Bird) from a dropdown menu, and a JWT is issued based on this selection. The token includes an expiration time, enhancing security by ensuring the token is only valid for a specific period. The Issuer component communicates with the backend API to create these tokens and stores them in the browser's localStorage for ease of access. Tokens can also be stored on a web app or database for ease of access, safe keeping and user authentication.
+
+## Verifier
+The Verifier component is designed to validate JWTs. It takes a JWT (usually from the browser's localStorage) and sends it to the backend API for verification. The API checks the token's validity, including whether it's expired or has been tampered with. The Verifier uses this response to inform the user of the token's status. This component is crucial for ensuring that the JWTs in circulation are valid and have not been compromised. Valid tokens have a class associated with them which can be decoded, read and used for additional logic such as redirecting users based on their class and more.
+
+## BlackLister
+The BlackLister component provides the functionality to blacklist tokens. When a token is blacklisted, it is added to a list of tokens that are no longer considered valid, regardless of their original expiration time. This feature is particularly useful for invalidating tokens that might have been issued erroneously or compromised in some way.
+
+## API (/pages/api/jwt.ts)
+The backend API, defined in /pages/api/jwt.ts, handles the creation, verification, and blacklisting of tokens. It uses the jsonwebtoken library to sign and verify JWTs. The API defines three main actions:
+
+Issue ('issue' action): Creates a new JWT based on the provided classification and expiration time.
+Verify ('verify' action): Checks if a given JWT is valid, not expired, displays its classification, and whether or not it is on the blacklist.
+Blacklist ('blacklist' action): Adds a token to the blacklist, effectively invalidating it for future verification requests.
+The API ensures that all interactions with JWTs are securely handled, leveraging environment variables for sensitive information like the JWT secret key.
+

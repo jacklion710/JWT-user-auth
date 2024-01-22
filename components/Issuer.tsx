@@ -83,7 +83,7 @@ const Issuer: FunctionComponent<IssuerProps> = ({ onVerify, onBlackList }) => {
         body: JSON.stringify({
           class: selectedClass, 
           exp: tokenExpiration,
-          action: 'issue'  // Add this line
+          action: 'issue' 
         }),
       });
   

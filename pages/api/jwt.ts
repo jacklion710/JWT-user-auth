@@ -3,9 +3,15 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import jwt from 'jsonwebtoken';
 
 // Define the type of blacklist as an array of strings
-let blacklist: string[] = []; 
+let blacklist: string[] = [];
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
+  // Retrieve the secret key from environment variables
+  const secretKey = process.env.JWT_SECRET_KEY;
+  if (!secretKey) {
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+
   if (req.method === 'POST') {
     const { class: userClass, exp, action, token } = req.body;
 
@@ -19,7 +25,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       }
 
       const expiresIn = `${exp}s`; // Assuming exp is in seconds
-      const newToken = jwt.sign({ class: userClass }, 'your-secret-key', { expiresIn });
+      const newToken = jwt.sign({ class: userClass }, secretKey, { expiresIn });
       return res.status(200).json({ token: newToken });
     } 
     else if (action === 'verify') {
@@ -29,7 +35,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       }
 
       try {
-        jwt.verify(token, 'your-secret-key');
+        jwt.verify(token, secretKey);
         return res.status(200).json({ message: 'Token is valid' });
       } catch (error) {
         return res.status(401).json({ error: 'Invalid token' });

@@ -53,26 +53,24 @@ const Verifier: FunctionComponent<VerifierProps> = ({ onBack, onBlackList }) => 
         },
         body: JSON.stringify({ token, action: 'verify' }),
       });
-
-      const data = await response.json();
-
+  
       if (response.ok) {
-        setVerificationStatus(`Token is valid. Class: ${data.class}`);
+        const decoded = jwtDecode<MyTokenPayload>(token);
+        setVerificationStatus(`Token is valid. Class: ${decoded.class}`);
         setStatusBoxBg(`${COLORS.accent}80`);
       } else {
-        throw new Error(data.error || "Error verifying token");
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Error verifying token");
       }
     } catch (error) {
       console.error('Error verifying token:', error);
-  
-      // Check if error is an instance of Error and extract the message
+    
       if (error instanceof Error) {
         setVerificationStatus(error.message);
       } else {
-        // If it's not an Error instance, use a generic error message
         setVerificationStatus('An unexpected error occurred.');
       }
-  
+    
       setStatusBoxBg(`${redPrimary}80`);
     }
   };

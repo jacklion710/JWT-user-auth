@@ -72,7 +72,7 @@ const Issuer: FunctionComponent<IssuerProps> = ({ onVerify, onBlackList }) => {
         isClosable: true,
       });
       return; // Early return to prevent further execution
-    }
+    } 
   
     try {
       const response = await fetch('/api/jwt', {
